@@ -22,6 +22,11 @@ class CreateTrackingsTable extends Migration
             $table->string('ipPublica');
             $table->string('ipPrivada');
             $table->string('ubicacionGeografica');
+            $table->string('idPc');
+            $table->string('nombre');
+            $table->string('tipo');
+            $table->string('cliente');
+            $table->string('hostname');
             $table->timestamps();
         });
     }

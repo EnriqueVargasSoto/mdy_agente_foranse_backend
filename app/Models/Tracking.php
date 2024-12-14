@@ -19,6 +19,11 @@ class Tracking extends Model
         'mac',
         'ipPublica',
         'ipPrivada',
-        'ubicacionGeografica'
+        'ubicacionGeografica',
+        'idPc',
+        'nombre',
+        'tipo',
+        'cliente',
+        'hostname'
     ];
 }

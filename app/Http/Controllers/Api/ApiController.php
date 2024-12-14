@@ -13,13 +13,27 @@ class ApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
         try {
-            $trackings = Tracking::all();
+            // Obtener el parámetro opcional de la solicitud
+            $filter = $request->input('idPc'); // Cambia 'filter' al nombre del parámetro que deseas usar
 
-            return response()->json(['data'=>$trackings], 200);
+            // Obtener todos los trackings o aplicar el filtro si se proporciona
+
+            if ($filter) {
+                $trackings = Tracking::when($filter, function ($query, $filter) {
+                    return $query->where('idPc', $filter); // Reemplaza 'campo_a_filtrar' con el campo real de tu tabla
+                })->first();
+            }else{
+                $trackings = Tracking::when($filter, function ($query, $filter) {
+                    return $query->where('idPc', $filter); // Reemplaza 'campo_a_filtrar' con el campo real de tu tabla
+                })->get();
+            }
+
+
+            return response()->json(['data' => $trackings], 200);
         } catch (\ErrorException $e) {
             //throw $th;
             return response()->json(['error' => $e], 500);
@@ -53,7 +67,12 @@ class ApiController extends Controller
                 'mac' => $request->mac,
                 'ipPublica' => $request->ipPublica,
                 'ipPrivada' => $request->ipPrivada,
-                'ubicacionGeografica' => $request->ubicacionGeografica
+                'ubicacionGeografica' => $request->ubicacionGeografica,
+                'idPc' => $request->idPc,
+                'nombre' => $request->name,
+                'tipo' => $request->type,
+                'cliente' => $request->client,
+                'hostname' => $request->hostname
             ]);
 
             return response()->json(['data' => $tracking], 200);
@@ -106,5 +125,9 @@ class ApiController extends Controller
     public function destroy($id)
     {
         //
+        $tracking = Tracking::find($id);
+        $tracking->delete();
+
+        return response(true);
     }
 }
