@@ -2,22 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements JWTSubject
+class Persona extends Model implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
+    //use Notifiable;//HasFactory;
     protected $table = 'TbPersona';
-
-    protected $primaryKey = 'id'; // Clave primaria (ajústalo si es diferente)
-
     protected $fillable = [
         'id',
         'in_TipoDocumento',
@@ -85,6 +80,9 @@ class User extends Authenticatable implements JWTSubject
         'vc_ref_token'
     ];
 
+    // Definir la clave primaria si es diferente
+    protected $primaryKey = 'id';
+
     public function pais()
     {
         return $this->belongsTo(Pais::class, 'in_PaisId', 'Id');
@@ -93,6 +91,11 @@ class User extends Authenticatable implements JWTSubject
     public function campanaDetalle()
     {
         return $this->hasMany(CampanaDetalle::class, 'in_PersonaId', 'id');
+    }
+
+    public function frecuencia()
+    {
+        return $this->hasMany(FrecuenciaRecurso::class, 'in_PersonaId', 'id');
     }
 
     public function getJWTIdentifier()
@@ -109,4 +112,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    // Mutador para encriptar la contraseña
+    /* public function setVcPasswordAttribute($value)
+    {
+        $this->attributes['vc_password'] = bcrypt($value);
+    } */
 }

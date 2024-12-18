@@ -9,7 +9,12 @@ class ScreenEvent extends Model
 {
     use HasFactory;
 
-    protected $table = 'screen_events';
+    protected $table = 'af_recursos';
 
-    protected $fillable = ['id','idTracking','objectName', 'url'];
+    protected $fillable = ['id','in_TrackingId','objectName', 'url'];
+
+    public function tracking()
+    {
+        return $this->belongsTo(Tracking::class, 'in_TrackingId', 'id');
+    }
 }

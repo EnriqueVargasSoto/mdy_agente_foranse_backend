@@ -9,10 +9,11 @@ class Tracking extends Model
 {
     use HasFactory;
 
-    protected $table = 'trackings';
+    protected $table = 'af_tracking';
 
     protected $fillable = [
         'id',
+        'in_CampanaDetalleId',
         'sistemaOperativo',
         'procesador',
         'ram',
@@ -26,4 +27,14 @@ class Tracking extends Model
         'cliente',
         'hostname'
     ];
+
+    public function campanaDetalle()
+    {
+        return $this->belongsTo(CampanaDetalle::class, 'in_CampanaDetalleId', 'Id');
+    }
+
+    public function screens()
+    {
+        return $this->hasMany(ScreenEvent::class, 'in_TrackingId', 'id');
+    }
 }
